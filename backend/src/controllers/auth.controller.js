@@ -51,7 +51,8 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    const {email, password} = req.body
+   try {
+     const {email, password} = req.body
     if (!email || !password) {
         return res.status(400).json({message: "All fields are required"})
     }
@@ -64,14 +65,30 @@ export const login = async (req, res) => {
         return res.status(400).json({message: "Invalid credentials"})
     }
     generateToken(user._id, res)
-    res.send("Login")
+    res.status(200).send({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        profilePicture: user.profilePicture || ""
+    })
+   } catch (error) {
+    console.log("Login Error")
+     res.status(500).json({message: "Error logging in"})
+   }
 }
 export const logout = (req, res) => {
-    const {jwt} = req.cookies
-    if (!jwt) {
-        return res.status(400).json({message: "No token provided"})
-    }    
-    res.clearCookie("jwt")
-    res.send("Logout")  
+    try {
+       res.cookie("jwt", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(0),
+        sameSite: "strict",
+       })
+       res.status(200).json({message: "Logged out successfully"})
+    } catch (error) {
+        console.log("Logout Error")
+        res.status(500).json({message: "Error logging out"})
+    }
 
 }   
