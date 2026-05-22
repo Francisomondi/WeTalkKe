@@ -77,6 +77,40 @@ export const login = async (req, res) => {
      res.status(500).json({message: "Error logging in"})
    }
 }
+
+export const getProfile = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).select("-password")  
+        if (!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+        res.status(200).json(user)
+    } catch (error) {
+        console.log("Get Profile Error")
+        res.status(500).json({message: "Error fetching user profile"})
+    }
+
+}
+
+export const updateProfile = async (req, res) => {  
+    try {
+        const {username, phone, profilePicture} = req.body
+        const user = await userModel.findById(req.user.id)
+        if (!user) {
+            return res.status(404).json({message: "User not found"})
+        }   
+        user.username = username || user.username
+        user.phone = phone || user.phone
+        user.profilePicture = profilePicture || user.profilePicture
+        await user.save()
+        res.status(200).json(user)
+    } catch (error) {
+        console.log("Update Profile Error")
+        res.status(500).json({message: "Error updating user profile"})
+    }   
+
+}
+
 export const logout = (req, res) => {
     try {
        res.cookie("jwt", "", {
