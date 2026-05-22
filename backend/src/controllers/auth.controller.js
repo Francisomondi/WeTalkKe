@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
    try {
-     const {username, email, phone, password} = req.body
+     const {username, email, phone, password, profilePicture} = req.body
       //validation
      if (!username || !email || !phone || !password) {
         return res.status(400).json({message: "All fields are required"})
@@ -28,7 +28,8 @@ export const register = async (req, res) => {
         username,
         email: email.toLowerCase(), 
         phone,
-        password: hashedPassword
+        password: hashedPassword,
+        profilePicture: profilePicture || ""
      })
         const userId = user._id
         await user.save()
@@ -39,7 +40,8 @@ export const register = async (req, res) => {
         _id: user._id, 
         username: user.username, 
         email: user.email, 
-        phone: user.phone 
+        phone: user.phone ,
+        profilePicture: user.profilePicture || ""
     })    
 
    } catch (error) {
