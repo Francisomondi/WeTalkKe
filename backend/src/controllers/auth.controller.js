@@ -1,6 +1,7 @@
 import { generateToken } from "../lib/utils.js"
 import userModel from "../models/user.model.js"
 import bcrypt from "bcryptjs";
+import cloudinary from "../lib/cloudinary.js";
 
 export const register = async (req, res) => {
    try {
@@ -92,18 +93,32 @@ export const getProfile = async (req, res) => {
 
 }
 
+
+
 export const updateProfile = async (req, res) => {  
     try {
         const {username, phone, profilePicture} = req.body
-        const user = await userModel.findById(req.user.id)
+        const userId = req.user._id
+        const user = await userModel.findById(userId)
         if (!user) {
             return res.status(404).json({message: "User not found"})
-        }   
-        user.username = username || user.username
-        user.phone = phone || user.phone
-        user.profilePicture = profilePicture || user.profilePicture
-        await user.save()
-        res.status(200).json(user)
+        } 
+        
+        const cloudinaryResponse = await cloudinary.uploader.upload(profilePicture)
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                username: username || user.username,
+                phone: phone || user.phone,
+                profilePicture: cloudinaryResponse.secure_url || user.profilePicture
+            },
+            {new: true}
+        )
+        if (!updatedUser) {
+            return res.status(404).json({message: "User not found"})
+        }
+
+        res.status(200).json(updatedUser)
     } catch (error) {
         console.log("Update Profile Error")
         res.status(500).json({message: "Error updating user profile"})
@@ -126,3 +141,16 @@ export const logout = (req, res) => {
     }
 
 }   
+
+export const checkAuth = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user)  
+        if (!user) {
+            return res.status(404).json({message: "User not found"})
+        }
+        res.status(200).json(user)
+    } catch (error) {
+        console.log("Check Auth Error")
+        res.status(500).json({message: "Error checking authentication"})
+    }
+}
