@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
-import userModel from "./user.model";
+import userModel from "./user.model.js";
 
 
 const userSchema = new mongoose.Schema({
     senderId: {
-        type: mongoose.Schema.types.ObjectId,    
+        type: mongoose.Schema.Types.ObjectId,    
         ref: userModel,
         required: true
     },
     receiverId: {
-        type: mongoose.Schema.types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: userModel,
         required: true
     },
