@@ -1,6 +1,7 @@
 import express from "express";
 import {connectDb} from "./lib/db.js"
 import authRoutes from "./routes/auth.routes.js"
+import messageRoutes from "./routes/message.routes.js"
 import dotenv from "dotenv"
 import { connect } from "mongoose";
 import cors from "cors"
@@ -16,7 +17,10 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieparser())
 
 
-app.use("/api/auth", authRoutes)  
+app.use("/api/auth", authRoutes) 
+app.use("/api/messages", messageRoutes) 
+
+
 const PORT = process.env.PORT || 3000
 
 app.listen (PORT, () => {
