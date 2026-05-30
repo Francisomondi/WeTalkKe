@@ -16,7 +16,7 @@ export const protectRoute = async (req, res, next) => {
         req.user = user
         next()
     } catch (error) {
-        console.log("Auth Middleware Error")
+        console.log("Auth Middleware Error", error.message)
         res.status(401).json({message: "Unauthorized"})
     }
 }
