@@ -8,11 +8,12 @@ import ProfilePage from './pages/ProfilePage'
 import ChatPage from './pages/ChatPage'
 import SettingsPage from './pages/SettingsPage'
 import { useAuthStore } from './store/useAuthStore'
+import { Loader } from 'lucide-react'
 
 
 const App = () => {
 
-  const {authUser, checkAuth} = useAuthStore()
+  const {authUser, checkAuth,isCheckingAuth} = useAuthStore()
 
   useEffect(() => {
     checkAuth()
