@@ -1,16 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-const Homepage = props => {
+const Homepage = () => {
   return (
     <div>
-      Homepage
+      HomePage
     </div>
   )
-}
-
-Homepage.propTypes = {
-
 }
 
 export default Homepage

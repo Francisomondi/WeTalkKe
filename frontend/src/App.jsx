@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Navbar from './components/Navbar'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Homepage from './pages/Homepage'
+import HomePage from './pages/Homepage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
@@ -30,12 +30,12 @@ const App = () => {
       <Navbar />
       <Routes>
         {/* Define your routes here */}
-        <Route path="/" element={authUser ? <Homepage /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/login" />} />
+        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
+        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />}/>
+        <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/" />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
         <Route path="/chat" element={authUser ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path="/settings" element={ <SettingsPage />}/>
+        <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to="/login" />} />
         {/* Add more routes as needed */}
 
       </Routes>
