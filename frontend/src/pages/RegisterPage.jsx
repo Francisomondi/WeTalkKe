@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore'
-import { MessageSquare, User, Mail, Phone, Lock, EyeOff, Eye } from 'lucide-react'
+import { MessageSquare, User, Mail, Phone, Lock, EyeOff, Eye, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import AuthImagePattern from '../components/AuthImagePattern'
+import toast from 'react-hot-toast'
 
 
 const RegisterPage = () => {
@@ -17,9 +19,19 @@ const RegisterPage = () => {
   })
 
   const {signUp, isSigningUp} = useAuthStore()
-  const validateForm = () => {}
+  const validateForm = () => {
+      if(!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+        toast.error("Please fill in all required fields")
+        return false
+      }
+      return true
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
+    const success = validateForm()
+    if(success === true) {
+      signUp(formData)
+    }
   }
   return (
     <div className='min-h-screen grid lg:grid-cols-2'>
@@ -174,6 +186,14 @@ const RegisterPage = () => {
         </div>
 
       </div>
+
+      {/* Right side with image */}
+      <AuthImagePattern
+        title="Join Our Community" 
+        subtitle="Connect with like-minded individuals and grow your network."
+      />
+
+      
     </div>
   )
 }

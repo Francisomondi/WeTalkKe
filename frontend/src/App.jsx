@@ -9,6 +9,7 @@ import ChatPage from './pages/ChatPage'
 import SettingsPage from './pages/SettingsPage'
 import { useAuthStore } from './store/useAuthStore'
 import { Loader } from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
 
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
         {/* Add more routes as needed */}
 
       </Routes>
+      <Toaster />
     </div>
   )
 }
