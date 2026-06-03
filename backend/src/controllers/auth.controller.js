@@ -84,7 +84,7 @@ export const login = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        const user = await userModel.findById(req.user.id).select("-password")  
+        const user = await userModel.findById(req.user._id).select("-password")  
         if (!user) {
             return res.status(404).json({message: "User not found"})
         }
@@ -98,36 +98,39 @@ export const getProfile = async (req, res) => {
 
 
 
-export const updateProfile = async (req, res) => {  
-    try {
-        const {username, phone, profilePicture} = req.body
-        const userId = req.user._id
-        const user = await userModel.findById(userId)
-        if (!user) {
-            return res.status(404).json({message: "User not found"})
-        } 
-        
-        const cloudinaryResponse = await cloudinary.uploader.upload(profilePicture)
-        const updatedUser = await userModel.findByIdAndUpdate(
-            userId,
-            {
-                username: username || user.username,
-                phone: phone || user.phone,
-                profilePicture: cloudinaryResponse.secure_url || user.profilePicture
-            },
-            {new: true}
-        )
-        if (!updatedUser) {
-            return res.status(404).json({message: "User not found"})
-        }
+export const updateProfile = async (req, res) => {
+  try {
+    const { username, phone, profilePicture } = req.body;
+    const userId = req.user._id;
 
-        res.status(200).json(updatedUser)
-    } catch (error) {
-        console.log("Update Profile Error")
-        res.status(500).json({message: "Error updating user profile"})
-    }   
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-}
+    let imageUrl = user.profilePicture;
+
+    if (profilePicture) {
+      const cloudinaryResponse = await cloudinary.uploader.upload(profilePicture);
+      imageUrl = cloudinaryResponse.secure_url;
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        username: username || user.username,
+        phone: phone || user.phone,
+        profilePicture: imageUrl,
+      },
+      { new: true }
+    ).select("-password");
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log("Update Profile Error:", error.message);
+    res.status(500).json({ message: "Error updating user profile" });
+  }
+};
 
 export const logout = (req, res) => {
     try {
