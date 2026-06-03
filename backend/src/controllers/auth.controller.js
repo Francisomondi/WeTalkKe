@@ -42,8 +42,10 @@ export const register = async (req, res) => {
         username: user.username, 
         email: user.email, 
         phone: user.phone ,
-        profilePicture: user.profilePicture || ""
-    })    
+        profilePicture: user.profilePicture || "",
+        createdAt: user.createdAt
+     })
+       
 
    } catch (error) {
     console.log("Register Error")
@@ -71,7 +73,8 @@ export const login = async (req, res) => {
         username: user.username,
         email: user.email,
         phone: user.phone,
-        profilePicture: user.profilePicture || ""
+        profilePicture: user.profilePicture || "",
+        createdAt: user.createdAt
     })
    } catch (error) {
     console.log("Login Error")
