@@ -38,7 +38,7 @@ const App = () => {
         <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/" />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
         <Route path="/chat" element={authUser ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to="/login" />} />
+        <Route path="/settings" element={ <SettingsPage /> }/>
         {/* Add more routes as needed */}
 
       </Routes>
