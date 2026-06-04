@@ -17,11 +17,12 @@ const LoginPage = () => {
     login(formData)
   }
   return (
-    <div className="h-screen grid lg:grid-cols-2">
+    <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
+
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
               <div
