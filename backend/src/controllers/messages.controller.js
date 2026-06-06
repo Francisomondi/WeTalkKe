@@ -1,5 +1,6 @@
 import messageModel from "../models/message.model.js"
 import userModel from "../models/user.model.js"
+import cloudinary from "../lib/cloudinary.js";
 
 export const getUsersForSidebar = async (req, res) => {
     try {
@@ -22,7 +23,7 @@ export const getMessages = async (req, res) => {
                 {senderId: senderId, receiverId: usersChatId},
                 {senderId: usersChatId, receiverId: senderId}
             ]        
-        })
+        }).sort({createdAt: 1}) // Sort messages by creation time in ascending order
         res.status(200).json(messages)
     } catch (error) {
         console.log("Get Messages Error")
@@ -43,7 +44,7 @@ export const createMessage = async (req, res) => {
         }
         
         const newMessage = await messageModel.create({senderId, receiverId, text, image: imageUrl})
-        await newMessage.save()
+    
         res.status(200).json(newMessage)
     } catch (error) {
         console.log("Create Message Error")
