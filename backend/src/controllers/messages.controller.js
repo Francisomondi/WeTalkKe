@@ -51,3 +51,24 @@ export const createMessage = async (req, res) => {
         res.status(500).json({message: "Error creating message"})
     }    
 }   
+
+export const sendMessage = async (req, res) => {
+    try {
+        const {id: receiverId} = req.params
+        const senderId = req.user._id
+        const {text, image} = req.body 
+        
+        let imageUrl = ""
+        if (image) {
+            const cloudinaryResponse = await cloudinary.uploader.upload(image)
+            imageUrl = cloudinaryResponse.secure_url
+        }
+        
+        const newMessage = await messageModel.create({senderId, receiverId, text, image: imageUrl})
+    
+        res.status(200).json(newMessage)
+    } catch (error) {
+        console.log("Send Message Error")
+        res.status(500).json({message: "Error sending message"})
+    }    
+} 
