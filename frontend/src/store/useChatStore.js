@@ -42,7 +42,7 @@ export const useChatStore  = create((set,get) => ({
         const{selectedUser,messages} = get()
         if (!messageData.text.trim() && !messageData.image) return;
         try {
-            const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData)
+            const res = await axiosInstance.post(`/messages/${selectedUser._id}`, messageData)
             set({messages: [...messages, res.data]})
             toast.success("Message sent")
         } catch (error) {

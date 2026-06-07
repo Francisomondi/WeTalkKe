@@ -8,6 +8,6 @@ import { protectRoute } from "../middlewares/auth.middleware.js";
 router.get("/users", protectRoute, getUsersForSidebar);
 router.post("/create/:id", protectRoute, createMessage);
 router.get("/:id", protectRoute, getMessages);
-router.post("/send/:id", protectRoute, sendMessage);
+router.post("/:id", protectRoute, sendMessage);
 
 export default router
