@@ -58,10 +58,8 @@ export const useChatStore  = create((set,get) => ({
         const socket = useAuthStore.getState().socket
         if (!socket) return;    
         socket.on("new-message", (message) => {
-            //const {selectedUser} = get()
-           // if (message.senderId === selectedUser._id || message.receiverId === selectedUser._id) {
-            //    callback(message)
-            // }
+            const {selectedUser} = get()
+            if (message.senderId !== selectedUser._id) return; // Only update if the new message is from the currently selected user
             set({
                 messages: [...get().messages, message]
             })
@@ -74,7 +72,7 @@ export const useChatStore  = create((set,get) => ({
         socket.off("new-message")
     },
 
-    //optimize it later by only fetching messages for the selected user instead of all users
+   
     setSelectedUser: (user) => set({selectedUser: user})  
 
 })) 
