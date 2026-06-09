@@ -6,10 +6,10 @@ import dotenv from "dotenv"
 import { connect } from "mongoose";
 import cors from "cors"
 import cookieparser from "cookie-parser"
+import {server, app} from "./lib/socket.js"
 
 dotenv.config()
 
-const app = express()
 
 console.log(process.env.CLOUDINARY_API_KEY);
 
@@ -28,7 +28,7 @@ app.use("/api/messages", messageRoutes)
 
 const PORT = process.env.PORT || 3000
 
-app.listen (PORT, () => {
+server.listen (PORT, () => {
     console.log("Server is running on port " + PORT)
     connectDb()
 })
