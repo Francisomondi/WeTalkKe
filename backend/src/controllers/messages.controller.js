@@ -1,6 +1,7 @@
 import messageModel from "../models/message.model.js"
 import userModel from "../models/user.model.js"
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getUsersForSidebar = async (req, res) => {
     try {
@@ -47,9 +48,11 @@ export const createMessage = async (req, res) => {
     
         res.status(200).json(newMessage)
     } catch (error) {
-        console.log("Create Message Error")
-        res.status(500).json({message: "Error creating message"})
-    }    
+        console.log("Create Message Error:", error);
+            res.status(500).json({
+                message: error.message
+            });
+        }   
 }   
 
 export const sendMessage = async (req, res) => {
@@ -65,10 +68,18 @@ export const sendMessage = async (req, res) => {
         }
         
         const newMessage = await messageModel.create({senderId, receiverId, text, image: imageUrl})
-    
+
+        //realtime message with socket.io
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("new-message", newMessage);
+        }
+
         res.status(200).json(newMessage)
     } catch (error) {
-        console.log("Send Message Error")
-        res.status(500).json({message: "Error sending message"})
-    }    
+        console.log("Send Message Error:", error);
+        res.status(500).json({
+            message: error.message
+        });
+    }  
 } 
