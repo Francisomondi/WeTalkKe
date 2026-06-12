@@ -25,7 +25,19 @@ app.use(cors({
 app.use("/api/auth", authRoutes) 
 app.use("/api/messages", messageRoutes) 
 
+const __dirname = path.resolve();
 
+app.use(
+  express.static(
+    path.join(__dirname, "../frontend/dist")
+  )
+);
+
+app.get("/{*any}", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "../frontend/dist/index.html")
+  );
+});
 
 
 const PORT = process.env.PORT || 3000
